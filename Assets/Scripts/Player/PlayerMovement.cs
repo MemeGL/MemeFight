@@ -1,12 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(UnitMovement))]
 public class PlayerMovement : MonoBehaviour {
 
-    private const float PHASE_THROUGH_PLATFORMS_DURATION = 0.05f;
+    private const float DURATION_PHASE_THROUGH_PLATFORMS = 0.05f;
 
+	/*
+	 * Uncomment this line ONLY IF you need to tweak the jump motion through the multiplier value.
+	 * However, you are not expected to touch this attribute as of now.
+	 * 
+	 * TODO: If no further adjustments are to be made to the jump motion, this can be turned into a constant value in the future.
+	 */
+	// [SerializeField]
+	private float m_jumpVelocityMultiplier = 4f;	// This multiplier is used for making the jump motion less floaty.
+													// Do NOT alter this value unnecessarily.
     [SerializeField]
     private float m_movementSpeed;
     [SerializeField]
@@ -28,13 +35,12 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void Update() {
-        m_unitMovement.m_velocity += Vector2.up * GlobalConstants.gravity * Time.deltaTime;
-        if (m_unitMovement.m_isGrounded) {
+        m_unitMovement.m_velocity += Vector2.up * Physics.gravity * m_jumpVelocityMultiplier * Time.deltaTime;
+		if (m_unitMovement.m_isGrounded) {
             if (m_jumpChargeDuration > 0) {
                 ResetJumpCharge();
             }
-        }
-        
+        }        
 
         m_unitMovement.m_isPhasingThroughPlatforms = m_phaseThroughPlatformsDuration > 0;
         m_phaseThroughPlatformsDuration -= Time.deltaTime;
@@ -44,6 +50,7 @@ public class PlayerMovement : MonoBehaviour {
         if (m_unitMovement.m_isGrounded && m_unitMovement.m_velocity.x > 0) {
             m_unitMovement.m_velocity.x = 0;
         }
+
         m_unitMovement.m_velocity.x = Mathf.MoveTowards(m_unitMovement.m_velocity.x, -m_movementSpeed, m_acceleration * Time.deltaTime);
     }
 
@@ -51,6 +58,7 @@ public class PlayerMovement : MonoBehaviour {
         if (m_unitMovement.m_isGrounded && m_unitMovement.m_velocity.x < 0) {
             m_unitMovement.m_velocity.x = 0;
         }
+
         m_unitMovement.m_velocity.x = Mathf.MoveTowards(m_unitMovement.m_velocity.x, m_movementSpeed, m_acceleration * Time.deltaTime);
     }
     public void StopMoving() {
@@ -64,12 +72,13 @@ public class PlayerMovement : MonoBehaviour {
                 m_isChargingJump = true;
                 m_canJump = false;
             }
+
             m_unitMovement.m_velocity.y = m_jumpSpeed;
             m_jumpChargeDuration += Time.deltaTime;
         }
     }
 
-    public void SetCanJump() {
+    public void EnableJump() {
         m_canJump = true;
     }
 
@@ -84,7 +93,7 @@ public class PlayerMovement : MonoBehaviour {
 
     public void PhaseThroughPlatforms() {
         if (m_unitMovement.m_isGrounded) {
-            m_phaseThroughPlatformsDuration = PHASE_THROUGH_PLATFORMS_DURATION;
+            m_phaseThroughPlatformsDuration = DURATION_PHASE_THROUGH_PLATFORMS;
         }
     }
 }

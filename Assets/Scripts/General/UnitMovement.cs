@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using MemeFight.Constants;
 
 [RequireComponent(typeof(Collider2D))]
 public class UnitMovement : MonoBehaviour {
 
     private const float RAYCAST_BUFFER_WIDTH = 0.05f;
-    private float MAXIMUM_CLIMBABLE_ANGLE = 60;
+    private const float CLIMBABLE_ANGLE_MAXIMUM = 60;
 
     private Collider2D m_collider;
 
@@ -51,8 +52,9 @@ public class UnitMovement : MonoBehaviour {
         if (horizontalHit) {
             hitLayer = horizontalHit.collider.gameObject.layer;
         }
+
         if (horizontalHit && (hitLayer == LayerMask.NameToLayer(Layers.BOUNDARY) || (m_isGrounded && hitLayer == LayerMask.NameToLayer(Layers.PLATFORM)))) {
-            if (Vector2.Angle(horizontalHit.normal, Vector2.up) > MAXIMUM_CLIMBABLE_ANGLE) {
+            if (Vector2.Angle(horizontalHit.normal, Vector2.up) > CLIMBABLE_ANGLE_MAXIMUM) {
                 float distanceToObstacle = horizontalHit.distance - halfBoundsWidthX;
                 transform.Translate(raycastDirection * distanceToObstacle);
                 m_velocity = new Vector2(0, m_velocity.y);
@@ -97,7 +99,7 @@ public class UnitMovement : MonoBehaviour {
 
         if (raycastIndexUsed != -1) {
             RaycastHit2D verticalHit = verticalHits[raycastIndexUsed];
-            if (Vector2.Angle(verticalHit.normal, Vector2.up) > MAXIMUM_CLIMBABLE_ANGLE) {
+            if (Vector2.Angle(verticalHit.normal, Vector2.up) > CLIMBABLE_ANGLE_MAXIMUM) {
                 float slideDirectionX = -Mathf.Sign(verticalHit.normal.x);
                 Vector2 directionAlongGround = new Vector2(verticalHit.normal.y * slideDirectionX, -verticalHit.normal.x * slideDirectionX);
                 float slideVelocityScale = Vector2.Angle(verticalHit.normal, Vector2.up) / 90f;

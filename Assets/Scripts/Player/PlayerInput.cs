@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using MemeFight.Constants;
 
 [RequireComponent(typeof(PlayerMovement))]
 public class PlayerInput : MonoBehaviour {
@@ -23,7 +22,7 @@ public class PlayerInput : MonoBehaviour {
         } else if (m_isPressingUp) {
             m_isPressingUp = false;
             m_playerMovement.StopChargingJump();
-            m_playerMovement.SetCanJump();
+            m_playerMovement.EnableJump();
         }
         if (Input.GetAxisRaw(InputAxes.VERTICAL) < -0.5f && !m_isPressingDown) {
             m_isPressingDown = true;
