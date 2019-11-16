@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour {
 	 * TODO: If no further adjustments are to be made to the jump motion, this can be turned into a constant value in the future.
 	 */
 	// [SerializeField]
-	private float m_jumpVelocityMultiplier = 4f;	// This multiplier is used for making the jump motion less floaty.
+	private float m_jumpGravityMultiplier = 4f;		// This multiplier is used for making the jump motion less floaty.
 													// Do NOT alter this value unnecessarily.
     [SerializeField]
     private float m_movementSpeed;
@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void Update() {
-        m_unitMovement.m_velocity += Vector2.up * Physics.gravity * m_jumpVelocityMultiplier * Time.deltaTime;
+        m_unitMovement.m_velocity += Vector2.up * Physics.gravity * m_jumpGravityMultiplier * Time.deltaTime;
 		if (m_unitMovement.m_isGrounded) {
             if (m_jumpChargeDuration > 0) {
                 ResetJumpCharge();
