@@ -3,6 +3,8 @@
 	public static class Global {
 
 		public static float gravity = -9.81f * 4;
+		public const string NAME_OBJECT_PLAYER = "Player";
+		public const string NAME_OBJECT_BOSS = "Boss";
 
 	}
 
