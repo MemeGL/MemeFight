@@ -26,52 +26,46 @@ public class HittableStageEntitiesTest : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-		try {
-			if (testBossStageEntity == null || testPlayerEntity == null) {
-				throw new UnityException("Required test entities are absent.");
-			}
+		if (testBossStageEntity == null || testPlayerEntity == null) {
+			throw new UnityException("Required test entities are absent.");
+		}
 
-			stage.Begin();
+		stage.Begin();
 
-			testBossStageEntity.timeBeforeDeath = timeBeforeBossDies;
-			testPlayerEntity.timeBeforeDeath = timeBeforePlayerDies;
+		testBossStageEntity.timeBeforeDeath = timeBeforeBossDies;
+		testPlayerEntity.timeBeforeDeath = timeBeforePlayerDies;
 
-			if (timeBeforeBossDies == timeBeforePlayerDies) {
-				switch (entityDeathOrder) {
-					case EntityDeathOrder.Random:
-						var option = UnityEngine.Random.Range(0, 2);
-						if (option == 1) {
-							print("Testing for case where boss dies first...");
-							testBossStageEntity.Test();
-							testPlayerEntity.Test();
-						} else {
-							print("Testing for case where player dies first...");
-							testPlayerEntity.Test();
-							testBossStageEntity.Test();
-						}
-						break;
-					case EntityDeathOrder.Player_First:
-						print("Testing for current test case...");
-						testPlayerEntity.Test();
-						testBossStageEntity.Test();
-						break;
-					case EntityDeathOrder.Boss_First:
-						print("Testing for current test case...");
+		if (timeBeforeBossDies == timeBeforePlayerDies) {
+			switch (entityDeathOrder) {
+				case EntityDeathOrder.Random:
+					var option = UnityEngine.Random.Range(0, 2);
+					if (option == 1) {
+						print("Testing for case where boss dies first...");
 						testBossStageEntity.Test();
 						testPlayerEntity.Test();
-						break;
-					default:
-						throw new NotSupportedException("Invalid HittableStageEntitiesTest test case.");
-				}
-				
-			} else {
-				print("Testing for current test case...");
-				testPlayerEntity.Test();
-				testBossStageEntity.Test();
-			}
-		} catch (Exception e) {
-			Debug.LogError("HittableStageEntitiesTest cannot be executed correctly.", gameObject);
-			Debug.LogError("Caught exception: " + e.Message, gameObject);
+					} else {
+						print("Testing for case where player dies first...");
+						testPlayerEntity.Test();
+						testBossStageEntity.Test();
+					}
+					break;
+				case EntityDeathOrder.Player_First:
+					print("Testing for current test case...");
+					testPlayerEntity.Test();
+					testBossStageEntity.Test();
+					break;
+				case EntityDeathOrder.Boss_First:
+					print("Testing for current test case...");
+					testBossStageEntity.Test();
+					testPlayerEntity.Test();
+					break;
+				default:
+					throw new NotSupportedException("Invalid HittableStageEntitiesTest test case.");
+			}		
+		} else {
+			print("Testing for current test case...");
+			testPlayerEntity.Test();
+			testBossStageEntity.Test();
 		}		
     }
 
