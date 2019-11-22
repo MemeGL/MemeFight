@@ -17,21 +17,12 @@ public class Dash : Skill {
 
 	float m_timeElapsed;
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="args">
-	/// Expects arguments in this order:
-	/// 1. The mouse input's X value,
-	/// 2. The mouse input's Y value.
-	/// </param>
-	/// <returns></returns>
-	public override IEnumerator TriggerSkillCoroutine(params object[] args) {
+	public override IEnumerator TriggerSkillCoroutine(GameObject casterGameObject, GameObject targetGameObject, params object[] args) {
 		if (m_canTrigger) {
 			m_canTrigger = false;
 
-			// Locate the player object first
-			UnitMovement playerUnitMovement = GameObject.Find(Global.NAME_OBJECT_PLAYER)?.GetComponent<UnitMovement>();
+			// Get required player component references first
+			UnitMovement playerUnitMovement = casterGameObject?.GetComponent<UnitMovement>();
 			Vector2? playerCurrentVelocity = playerUnitMovement?.m_velocity;
 
 			if (playerCurrentVelocity == null) {
@@ -39,7 +30,7 @@ public class Dash : Skill {
 				yield return null;
 			} else {
 				Vector2 dashVelocityNormalized = ((Vector2) playerCurrentVelocity).normalized;
-				PreDashSetup(playerUnitMovement.gameObject, dashVelocityNormalized);
+				PreDashSetup(casterGameObject, dashVelocityNormalized);
 
 				// Apply the dash velocity on the player on every frame where the dash effect is active.
 				while (m_timeElapsed <= m_duration) {
@@ -53,7 +44,7 @@ public class Dash : Skill {
 					throw new UnityException("Dash skill cooldown cannot be lower than its duration.");
 				}
 				playerUnitMovement.m_velocity = (Vector2) playerCurrentVelocity;
-				PostDashSetup(playerUnitMovement.gameObject);
+				PostDashSetup(casterGameObject);
 				yield return new WaitForSeconds(m_cooldown - m_duration);
 				m_canTrigger = true;
 			}
@@ -62,7 +53,11 @@ public class Dash : Skill {
 		}
 	}
 
-	protected override void OnEnable() {
+	/// <summary>
+	/// Checks that the player <seealso cref="GameObject"/> has the <seealso cref="TrailRenderer"/> component
+	/// that is required to visualize the <see cref="Dash"/> effect.
+	/// </summary>
+	protected override void Awake() {
 		GameObject playerObject = GameObject.Find(Global.NAME_OBJECT_PLAYER);
 
 		if (playerObject == null) {
@@ -76,7 +71,7 @@ public class Dash : Skill {
 				Debug.LogError($"Exception in Dash.OnEnable():\n\n{e.Message}", this);
 			}
 		}
-		base.OnEnable();
+		base.Awake();
 	}
 
 	/// <summary>
@@ -90,7 +85,7 @@ public class Dash : Skill {
 	/// </summary>
 	/// <param name="playerObject">The player's <seealso cref="GameObject"/>.</param>
 	/// <param name="currentVelocityNormalized">The player's velocity at the present moment of time, to create the dash particle effect.</param>
-	void PreDashSetup(in GameObject playerObject, in Vector2 currentVelocityNormalized) {
+	void PreDashSetup(GameObject playerObject, in Vector2 currentVelocityNormalized) {
 		try {
 			playerObject.GetComponent<PlayerInput>().enabled = false;
 			playerObject.GetComponent<TrailRenderer>().time = m_skillActiveTrailTime;
@@ -111,7 +106,7 @@ public class Dash : Skill {
 	/// 2. Re-enables the player input to allow movement control after the dash effect expires.
 	/// </summary>
 	/// <param name="playerObject"></param>
-	void PostDashSetup(in GameObject playerObject) {
+	void PostDashSetup(GameObject playerObject) {
 		try {
 			playerObject.GetComponent<TrailRenderer>().time = m_skillInactiveTrailTime;
 			playerObject.GetComponent<PlayerInput>().enabled = true;
