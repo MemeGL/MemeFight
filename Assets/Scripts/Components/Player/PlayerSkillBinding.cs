@@ -2,6 +2,9 @@
 
 public class PlayerSkillBinding : MonoBehaviour {
 
+	[SerializeField]
+	PlayerSkillRepository m_playerSkillRepository;
+
 	/// <summary>
 	/// The 0th index is reserved for the <seealso cref="Empty"/> <seealso cref="Skill"/>.
 	/// </summary>
@@ -13,23 +16,23 @@ public class PlayerSkillBinding : MonoBehaviour {
 	[SerializeField]
 	int m_skillIndexSecondary = 0;
 
-	public void TriggerPrimarySkill() {
-		StartCoroutine(PlayerSkillRepository.Instance.GetSkillAt(m_skillIndexPrimary)?.TriggerSkillCoroutine(Input.mousePosition.x, Input.mousePosition.y));
+	public virtual void TriggerPrimarySkill(params object[] args) {
+		StartCoroutine(m_playerSkillRepository.GetSkillAt(m_skillIndexPrimary)?.TriggerSkillCoroutine(gameObject, Stage.CurrentStageInstance.CurrentBossObject, args));
 	}
 
-	public void TriggerSecondarySkill() {
-		StartCoroutine(PlayerSkillRepository.Instance.GetSkillAt(m_skillIndexSecondary)?.TriggerSkillCoroutine(Input.mousePosition.x, Input.mousePosition.y));
+	public virtual void TriggerSecondarySkill(params object[] args) {
+		StartCoroutine(m_playerSkillRepository.GetSkillAt(m_skillIndexSecondary)?.TriggerSkillCoroutine(gameObject, Stage.CurrentStageInstance.CurrentBossObject, args));
 	}
 
-	public void AssignPrimarySkill(int skillIndex) {
+	public virtual void AssignPrimarySkill(int skillIndex) {
 		m_skillIndexPrimary = skillIndex;
 	}
 
-	public void AssignSecondarySkill(int skillIndex) {
+	public virtual void AssignSecondarySkill(int skillIndex) {
 		m_skillIndexSecondary = skillIndex;
 	}
 
-	public void ResetAllSkillBindings() {
+	public virtual void ResetAllSkillBindings() {
 		AssignPrimarySkill(SKILL_INDEX_EMPTY);
 		AssignSecondarySkill(SKILL_INDEX_EMPTY);
 	}

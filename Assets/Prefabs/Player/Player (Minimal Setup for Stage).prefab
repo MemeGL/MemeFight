@@ -192,5 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c63dee3c172dce445a5759890c7329dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_skillIndexPrimary: -1
-  m_skillIndexSecondary: -1
+  m_playerSkillRepository: {fileID: 11400000, guid: b58a5fa0a6b2c994c9a00aa9c9ab51a5,
+    type: 2}
+  m_skillIndexPrimary: 0
+  m_skillIndexSecondary: 0
