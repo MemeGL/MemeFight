@@ -6,9 +6,15 @@ using MemeFight.Constants;
 /// </summary>
 public class Stage : MonoBehaviour {
 
+	public static Stage CurrentStageInstance;
+
+	public GameObject CurrentBossObject;
+
 	protected bool m_hasStageEnded = false;
 	
 	public virtual void Awake() {
+		CurrentStageInstance = this;
+
 		// If the player dies, he loses the stage.
 		StageEntity player = GameObject.Find(Global.NAME_OBJECT_PLAYER)?.GetComponent<StageEntity>();
 		if (player == null) {
@@ -17,8 +23,13 @@ public class Stage : MonoBehaviour {
 			player.AddOnDeathCallback(Lose);
 		}
 
+		// Locate the Boss if not assigned.
+		if (CurrentBossObject == null) {
+			CurrentBossObject = GameObject.Find(Global.NAME_OBJECT_BOSS);
+		}
+
 		// If the boss dies, player wins the stage.
-		StageEntity boss = GameObject.Find(Global.NAME_OBJECT_BOSS)?.GetComponent<StageEntity>();
+		StageEntity boss = CurrentBossObject?.GetComponent<StageEntity>();
 		if (boss == null) {
 			throw new UnityException($"No boss of name '{Global.NAME_OBJECT_BOSS}' or its corresponding StageEntity component detected.");
 		} else {
