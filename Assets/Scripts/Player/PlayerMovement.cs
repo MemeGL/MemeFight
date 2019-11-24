@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(UnitMovement))]
+[RequireComponent(typeof(ObjectMovement))]
 public class PlayerMovement : MonoBehaviour {
 
     private const float PHASE_THROUGH_PLATFORMS_DURATION = 0.05f;
@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField]
     private float m_maxJumpHoldDuration;
 
-    private UnitMovement m_unitMovement;
+    private ObjectMovement m_unitMovement;
 
     private bool m_canJump = false;
     private bool m_isChargingJump = false;
@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour {
     private float m_phaseThroughPlatformsDuration = 0;
 
     private void Awake() {
-        m_unitMovement = GetComponent<UnitMovement>();
+        m_unitMovement = GetComponent<ObjectMovement>();
     }
 
     private void Update() {

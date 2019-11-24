@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class UnitMovement : MonoBehaviour {
+public class ObjectMovement : MonoBehaviour {
 
     private const float RAYCAST_BUFFER_WIDTH = 0.05f;
     private float MAXIMUM_CLIMBABLE_ANGLE = 60;
