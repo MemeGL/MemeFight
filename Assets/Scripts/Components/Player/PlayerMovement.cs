@@ -4,7 +4,7 @@ namespace MemeFight.Components
 {
 	namespace Player
 	{
-		[RequireComponent(typeof(UnitMovement))]
+		[RequireComponent(typeof(ObjectMovement))]
 		public class PlayerMovement : MonoBehaviour {
 
 			private const float DURATION_PHASE_THROUGH_PLATFORMS = 0.05f;
@@ -27,7 +27,7 @@ namespace MemeFight.Components
 			[SerializeField]
 			private float m_maxJumpHoldDuration;
 
-			private UnitMovement m_unitMovement;
+			private ObjectMovement m_unitMovement;
 
 			private bool m_canJump = false;
 			private bool m_isChargingJump = false;
@@ -35,11 +35,11 @@ namespace MemeFight.Components
 			private float m_phaseThroughPlatformsDuration = 0;
 
 			private void Awake() {
-				m_unitMovement = GetComponent<UnitMovement>();
+				m_unitMovement = GetComponent<ObjectMovement>();
 			}
 
 			private void Update() {
-				m_unitMovement.m_velocity += Vector2.up * Physics.gravity * m_jumpGravityMultiplier * Time.deltaTime;
+				m_unitMovement.m_velocity += Vector2.up * Physics2D.gravity * m_jumpGravityMultiplier * Time.deltaTime;
 				if (m_unitMovement.m_isGrounded) {
 					if (m_jumpChargeDuration > 0) {
 						ResetJumpCharge();

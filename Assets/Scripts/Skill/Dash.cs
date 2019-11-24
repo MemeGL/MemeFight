@@ -24,7 +24,7 @@ public class Dash : MemeFight.Skills.Skill {
 			m_canTrigger = false;
 
 			// Get required player component references first
-			UnitMovement playerUnitMovement = casterGameObject?.GetComponent<UnitMovement>();
+			ObjectMovement playerUnitMovement = casterGameObject?.GetComponent<ObjectMovement>();
 			Vector2? playerCurrentVelocity = playerUnitMovement?.m_velocity;
 
 			if (playerCurrentVelocity == null) {

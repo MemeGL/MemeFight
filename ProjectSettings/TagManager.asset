@@ -38,6 +38,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background FX
+    uniqueID: 4105328375
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Foreground FX
+    uniqueID: 3911348555
+    locked: 0
+  - name: Boundary
+    uniqueID: 502755345
     locked: 0

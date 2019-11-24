@@ -9,7 +9,7 @@ Preset:
   m_Name: PlayerMovement_Default
   m_TargetType:
     m_NativeTypeID: 114
-    m_ManagedTypePPtr: {fileID: 11500000, guid: fa2a170cbef700540b144bcdef4b2c94,
+    m_ManagedTypePPtr: {fileID: 11500000, guid: eb0c853825b4a8d4c81029af1678d73f,
       type: 3}
     m_ManagedTypeFallback: 
   m_Properties:
