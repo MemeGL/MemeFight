@@ -1,26 +1,32 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "PlayerSkillRepository", menuName = "Skill Repository/PlayerSkillRepository", order = 1)]
-public sealed class PlayerSkillRepository : ScriptableObject {
-
+namespace MemeFight.Skills
+{	
 	/// <summary>
-	/// The 0th <seealso cref="Skill"/> is reserved for "empty skill".
+	/// The asset data responsible for storing all implemented player <seealso cref="Skill"/>s.
 	/// </summary>
-	[SerializeField]
-	[Tooltip("The 0th Skill is reserved for the Empty Skill.")]
-	Skill[] playerSkills;
+	[CreateAssetMenu(fileName = "PlayerSkillRepository", menuName = "Skill Repository/PlayerSkillRepository", order = 1)]
+	public sealed class PlayerSkillRepository : ScriptableObject {
 
-	public bool HasSkillAt(int index) {
-		return -1 < index && index < playerSkills.Length;
-	}
+		/// <summary>
+		/// The 0th <seealso cref="Skill"/> is reserved for "empty skill".
+		/// </summary>
+		[SerializeField]
+		[Tooltip("The 0th Skill is reserved for the Empty Skill.")]
+		Skill[] playerSkills;
 
-	public Skill GetSkillAt(int index) {
-		if (HasSkillAt(index)) {
-			return playerSkills[index];
-		} else {
-			Debug.LogError("Attempted to access a skill at invalid index.", this);
-			return null;
+		public bool HasSkillAt(int index) {
+			return -1 < index && index < playerSkills.Length;
 		}
-	}
 
+		public Skill GetSkillAt(int index) {
+			if (HasSkillAt(index)) {
+				return playerSkills[index];
+			} else {
+				Debug.LogError("Attempted to access a skill at invalid index.", this);
+				return null;
+			}
+		}
+
+	}
 }

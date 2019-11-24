@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using MemeFight.Components.Hittables;
 
 public class HittableBossTest : HittableBoss {
 
@@ -14,4 +15,5 @@ public class HittableBossTest : HittableBoss {
 		base.Die();
 		Destroy(gameObject);
 	}
+
 }

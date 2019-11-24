@@ -1,16 +1,23 @@
 ﻿using UnityEngine;
+using MemeFight.Stage;
 
-/// <summary>
-/// The <seealso cref="Component"/> to be attached to a boss <seealso cref="GameObject"/> to make it a <seealso cref="HittableObject"/>.
-/// </summary>
-public class HittableBoss : HittableObject {
+namespace MemeFight.Components
+{
+	namespace Hittables
+	{
+		/// <summary>
+		/// The <seealso cref="Component"/> to be attached to a boss <seealso cref="GameObject"/> to make it a <seealso cref="HittableObject"/>.
+		/// </summary>
+		public class HittableBoss : HittableObject {
 
-	public override void Hit() {
-		throw new System.NotImplementedException();
+			public override void Hit() {
+				throw new System.NotImplementedException();
+			}
+
+			protected override void Die() {
+				GetComponent<StageEntity>().InvokeOnDeathCallbacks();
+			}
+
+		}
 	}
-
-	protected override void Die() {
-		GetComponent<StageEntity>().InvokeOnDeathCallbacks();
-	}
-
 }

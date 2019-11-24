@@ -2,9 +2,11 @@
 using System.Collections;
 using UnityEngine;
 using MemeFight.Constants;
+using MemeFight.Components;
+using MemeFight.Components.Player;
 
 [CreateAssetMenu(fileName = "Dash", menuName = "Skill/Dash", order = 2)]
-public class Dash : Skill {
+public class Dash : MemeFight.Skills.Skill {
 
 	[SerializeField]
 	float m_dashMagnitude;
@@ -57,7 +59,7 @@ public class Dash : Skill {
 	/// Checks that the player <seealso cref="GameObject"/> has the <seealso cref="TrailRenderer"/> component
 	/// that is required to visualize the <see cref="Dash"/> effect.
 	/// </summary>
-	protected override void Awake() {
+	protected override void OnEnable() {
 		GameObject playerObject = GameObject.Find(Global.NAME_OBJECT_PLAYER);
 
 		if (playerObject == null) {
@@ -71,7 +73,7 @@ public class Dash : Skill {
 				Debug.LogError($"Exception in Dash.OnEnable():\n\n{e.Message}", this);
 			}
 		}
-		base.Awake();
+		base.OnEnable();
 	}
 
 	/// <summary>

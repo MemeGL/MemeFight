@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using MemeFight.Components.Hittables;
 
 public class HittablePlayerTest : HittablePlayer {
 

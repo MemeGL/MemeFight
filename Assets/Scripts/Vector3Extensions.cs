@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 public static class Vector3Extensions {
+
     public static Vector2 xy(this Vector3 aVector) {
         return new Vector2(aVector.x, aVector.y);
     }
@@ -19,4 +20,5 @@ public static class Vector3Extensions {
     public static Vector2 zy(this Vector3 aVector) {
         return new Vector2(aVector.z, aVector.y);
     }
+
 }

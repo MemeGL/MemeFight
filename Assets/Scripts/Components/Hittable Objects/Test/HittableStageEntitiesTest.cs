@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using MemeFight.Stage;
 
 /// <summary>
 /// Used for testing the <seealso cref="Stage"/> handler logic.
@@ -76,4 +77,5 @@ public class HittableStageEntitiesTest : MonoBehaviour {
 				UnityEngine.SceneManagement.LoadSceneMode.Single);
 		}
 	}
+
 }
