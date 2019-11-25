@@ -4,82 +4,53 @@ using MemeFight.Components.Utilities.ObjectPooling;
 
 namespace MemeFight.Components
 {
-	[RequireComponent(typeof(PoolableObject))]
 	public class Projectile : MonoBehaviour {
 
-		protected float m_speed;
-		protected float m_lifetime;
-		protected bool m_isEnabled = false;
-		protected bool m_isExpired = false;
-		/// <summary>
-		/// The velocity of this projectile, expressed as a <seealso cref="Vector3"/>.
-		/// <br />
-		/// However, the z-value of this velocity value will be disregarded.
-		/// </summary>
-		protected Vector3 m_velocity;
-		protected PoolableObject m_poolableObjectComponent;
+        [SerializeField]
+        private LayerMask m_layerMask;
+        [SerializeField]
+        private float m_gravityMultiplier;
+
+        private Vector2 m_velocity;
+        protected float m_lifetime;
 
 		protected virtual void Awake() {
-			m_poolableObjectComponent = GetComponent<PoolableObject>();
+            Fire(transform.position, Vector2.down, 100);
 		}
 
 		protected virtual void Update() {
-			if (m_poolableObjectComponent.IsActiveInScene) {
-				if (m_isExpired) {
-					RemoveSelfFromScene();
-				} else if (m_isEnabled) {
-					transform.position += m_velocity * m_speed * Time.deltaTime;
-				}
+			if (m_lifetime <= 0) {
+                OnExpiry();
+            } else {
+				m_lifetime -= Time.deltaTime;
+            }
+            m_velocity += Physics2D.gravity * m_gravityMultiplier * Time.deltaTime;
+        }
 
-				if (m_lifetime <= 0) {
-					m_isExpired = true;
-				} else {
-					m_lifetime -= Time.deltaTime;
-				}
-			}
-		}
+        private void FixedUpdate() {
+            transform.position += (Vector3)m_velocity * Time.fixedDeltaTime;
+        }
 
-		public virtual void Fire(Vector3 startingPosition, float lifetime, float speed, ref Vector3 velocity) {
-			ResetToInitialState();
-			transform.position = startingPosition;
+		public virtual void Fire(Vector3 startPosition, Vector2 velocity, float lifetime) {
+			transform.position = startPosition;
 			m_lifetime = lifetime;
-			m_speed = speed;
-			velocity.z = 0;
-			m_velocity = velocity.normalized;
-			SpawnSelfInScene();
+            m_velocity = velocity;
 		}
 
-		protected virtual void SpawnSelfInScene() {
-			m_isEnabled = true;
-			m_poolableObjectComponent.IsActiveInScene = true;
+		protected virtual void OnExpiry() {
+            Destroy(gameObject);
 		}
 
-		protected virtual void RemoveSelfFromScene() {
-			StartCoroutine(ReturnToObjectPoolCoroutine());
-		}
-
-		protected virtual void ResetToInitialState() {
-			m_isEnabled = false;
-			m_isExpired = false;
-		}
-
-		protected IEnumerator ReturnToObjectPoolCoroutine() {
-			yield return new WaitForEndOfFrame();
-			m_poolableObjectComponent.IsActiveInScene = false;
-		}
-
-		protected virtual void OnCollisionEnter2D(Collision2D collision) {
-		}
-		protected virtual void OnCollisionStay2D(Collision2D collision) {
-		}
-		protected virtual void OnCollisionExit2D(Collision2D collision) {
-		}
+		protected virtual void OnCollisionEnter2D(Collision2D collision) { }
+		protected virtual void OnCollisionStay2D(Collision2D collision) { }
+		protected virtual void OnCollisionExit2D(Collision2D collision) { }
 		protected virtual void OnTriggerEnter2D(Collider2D collision) {
-		}
-		protected virtual void OnTriggerStay2D(Collider2D collision) {
-		}
-		protected virtual void OnTriggerExit2D(Collider2D collision) {
-		}
+            if (m_layerMask == (m_layerMask | (1 << collision.gameObject.layer))) {
+                OnExpiry();
+            }
+        }
+		protected virtual void OnTriggerStay2D(Collider2D collision) { }
+		protected virtual void OnTriggerExit2D(Collider2D collision) { }
 
 	}
 }

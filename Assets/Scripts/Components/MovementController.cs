@@ -5,7 +5,7 @@ using MemeFight.Components;
 public class MovementController : MonoBehaviour {
 
     [SerializeField]
-    private float gravityMultiplier = 4;
+    private float m_gravityMultiplier = 4;
 
     private ObjectMovement m_objectMovement;
 
@@ -14,11 +14,11 @@ public class MovementController : MonoBehaviour {
     }
 
     private void Update() {
-        m_objectMovement.m_velocity += Physics2D.gravity * gravityMultiplier * Time.deltaTime;
+        m_objectMovement.m_velocity += Physics2D.gravity * m_gravityMultiplier * Time.deltaTime;
     }
 
     public void Launch(Vector2 target, float height, out float timeTaken) {
-        float gravity = Physics2D.gravity.y * gravityMultiplier;
+        float gravity = Physics2D.gravity.y * m_gravityMultiplier;
         float verticalSpeed = Mathf.Sqrt(-2 * gravity * height);
         timeTaken = -verticalSpeed / gravity + Mathf.Sqrt(2 * (target.y - (transform.position.y + height)) / gravity);
         float horizontalSpeed = (target.x - transform.position.x) / timeTaken;

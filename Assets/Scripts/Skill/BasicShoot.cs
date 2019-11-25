@@ -29,7 +29,7 @@ public class BasicShoot : MemeFight.Skills.Skill {
 				Vector3 inputMousePosition = (Vector3) args[0];
 				inputMousePosition.z = casterGameObject.transform.position.z - Camera.main.transform.position.z;
 				Vector3 projectileDirection = Camera.main.ScreenToWorldPoint(inputMousePosition) - casterGameObject.transform.position;
-				ObjectPoolManager.Instance.GetObjectPoolAt(m_objectPoolIndex).NextAvailableObject?.GetComponent<Projectile>()?.Fire(casterGameObject.transform.position, m_bulletLifetime, m_bulletSpeed, ref projectileDirection);
+				ObjectPoolManager.Instance.GetObjectPoolAt(m_objectPoolIndex).NextAvailableObject?.GetComponent<Projectile>()?.Fire(casterGameObject.transform.position, projectileDirection * m_bulletSpeed, m_bulletLifetime);
 			} catch (InvalidCastException e) {
 				Debug.LogError($"Expected Vector3 but encountered {args[0]}:\n\n{e.Message}.", this);
 			}

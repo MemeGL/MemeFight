@@ -16,12 +16,11 @@ namespace MemeFight.Components
 				}
 			}
 			private Vector3 cameraInitialLocalPosition;
-			private List<ShakeInstance> shakeInstances;
+			private List<ShakeInstance> shakeInstances = new List<ShakeInstance>();
 
-			private void Awake() {
+            private void Awake() {
 				cameraTransform = Camera.main.transform;
 				cameraInitialLocalPosition = cameraTransform.localPosition;
-				shakeInstances = new List<ShakeInstance>();
 			}
 
 			public void Shake(float intensity, float duration, ShakeInstance.ShakeType type = ShakeInstance.ShakeType.Linear) {
