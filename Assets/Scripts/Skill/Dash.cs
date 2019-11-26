@@ -70,7 +70,7 @@ public class Dash : MemeFight.Skills.Skill {
 		} catch (MissingComponentException e) {
 			Debug.LogError($"Missing required component on player GameObject:\n\n{e.Message}", this);
 		} catch (Exception e) {
-			Debug.LogError($"Exception in Dash.OnEnable():\n\n{e.Message}", this);
+			Debug.LogError($"Exception in Dash.Awake():\n\n{e.Message}", this);
 		}
 	}
 
