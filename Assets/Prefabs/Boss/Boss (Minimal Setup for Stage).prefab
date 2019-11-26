@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8524435229273916209}
   - component: {fileID: 8524435229273916220}
   - component: {fileID: 8524435229273916223}
-  - component: {fileID: 8524435229273916222}
+  - component: {fileID: 4014934872572932791}
   m_Layer: 0
   m_Name: Boss (Minimal Setup for Stage)
   m_TagString: Untagged
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 421af4fa9b1dbbd4fadafb2965a77403, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8524435229273916222
+--- !u!114 &4014934872572932791
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,6 +102,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8524435229273916208}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b24587ed94e77b04e8a21925832f14c9, type: 3}
+  m_Script: {fileID: 11500000, guid: adf0e5a8a2ede4d45ab873a71fb9592f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
