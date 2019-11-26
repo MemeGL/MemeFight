@@ -18,20 +18,18 @@ public class Dash : MemeFight.Skills.Skill {
 
 	[Header("Dash visual effects on Player")]
 	[SerializeField]
-	GameObject m_playerObject;
-	[SerializeField]
 	float m_skillInactiveTrailTime;
 	[SerializeField]
 	float m_skillActiveTrailTime;
 
 	float m_timeElapsed;
 
-	public override IEnumerator TriggerSkillCoroutine(GameObject casterGameObject, GameObject targetGameObject, params object[] args) {
+	public override IEnumerator TriggerSkillCoroutine(GameObject targetGameObject, params object[] args) {
 		if (m_canTrigger) {
 			m_canTrigger = false;
 
 			// Get required player component references first
-			ObjectMovement playerUnitMovement = casterGameObject?.GetComponent<ObjectMovement>();
+			ObjectMovement playerUnitMovement = m_casterGameObject?.GetComponent<ObjectMovement>();
 			Vector2? playerCurrentVelocity = playerUnitMovement?.m_velocity;
 
 			if (playerCurrentVelocity == null) {
@@ -39,7 +37,7 @@ public class Dash : MemeFight.Skills.Skill {
 				yield return null;
 			} else {
 				Vector2 dashVelocityNormalized = ((Vector2) playerCurrentVelocity).normalized;
-				PreDashSetup(casterGameObject, dashVelocityNormalized);
+				PreDashSetup(dashVelocityNormalized);
 
 				// Apply the dash velocity on the player on every frame where the dash effect is active.
 				while (m_timeElapsed <= m_duration) {
@@ -53,7 +51,7 @@ public class Dash : MemeFight.Skills.Skill {
 					throw new UnityException("Dash skill cooldown cannot be lower than its duration.");
 				}
 				playerUnitMovement.m_velocity = (Vector2) playerCurrentVelocity;
-				PostDashSetup(casterGameObject);
+				PostDashSetup();
 				yield return new WaitForSeconds(m_cooldown - m_duration);
 				m_canTrigger = true;
 			}
@@ -66,24 +64,14 @@ public class Dash : MemeFight.Skills.Skill {
 	/// Checks that the player <seealso cref="GameObject"/> has the <seealso cref="TrailRenderer"/> component
 	/// that is required to visualize the <see cref="Dash"/> effect.
 	/// </summary>
-	protected override void OnEnable() {
-		if (m_playerObject == null) {
-			// Try to locate the default Player object by name if it was not assigned.
-			m_playerObject = GameObject.Find(Global.NAME_OBJECT_PLAYER);
-
-			if (m_playerObject == null) {
-				Debug.LogError("Player object not located in present scene.", this);
-			}
-		} else {
-			try {
-				m_playerObject.GetComponent<TrailRenderer>().time = m_skillInactiveTrailTime;
-			} catch (MissingComponentException e) {
-				Debug.LogError($"Missing required component on player GameObject:\n\n{e.Message}", this);
-			} catch (Exception e) {
-				Debug.LogError($"Exception in Dash.OnEnable():\n\n{e.Message}", this);
-			}
+	private void Awake() {
+		try {
+			m_casterGameObject.GetComponent<TrailRenderer>().time = m_skillInactiveTrailTime;
+		} catch (MissingComponentException e) {
+			Debug.LogError($"Missing required component on player GameObject:\n\n{e.Message}", this);
+		} catch (Exception e) {
+			Debug.LogError($"Exception in Dash.OnEnable():\n\n{e.Message}", this);
 		}
-		base.OnEnable();
 	}
 
 	/// <summary>
@@ -97,11 +85,11 @@ public class Dash : MemeFight.Skills.Skill {
 	/// </summary>
 	/// <param name="playerObject">The player's <seealso cref="GameObject"/>.</param>
 	/// <param name="currentVelocityNormalized">The player's velocity at the present moment of time, to create the dash particle effect.</param>
-	void PreDashSetup(GameObject playerObject, in Vector2 currentVelocityNormalized) {
+	void PreDashSetup(in Vector2 currentVelocityNormalized) {
 		try {
-			playerObject.GetComponent<PlayerInput>().enabled = false;
-			playerObject.GetComponent<TrailRenderer>().time = m_skillActiveTrailTime;
-			CreateEffect(playerObject.transform.position, currentVelocityNormalized);
+			m_casterGameObject.GetComponent<PlayerInput>().enabled = false;
+			m_casterGameObject.GetComponent<TrailRenderer>().time = m_skillActiveTrailTime;
+			CreateEffect(m_casterGameObject.transform.position, currentVelocityNormalized);
 			m_timeElapsed = 0;
 		} catch (MissingComponentException e) {
 			Debug.LogError($"Missing required component on player GameObject:\n\n{e.Message}", this);
@@ -118,10 +106,10 @@ public class Dash : MemeFight.Skills.Skill {
 	/// 2. Re-enables the player input to allow movement control after the dash effect expires.
 	/// </summary>
 	/// <param name="playerObject"></param>
-	void PostDashSetup(GameObject playerObject) {
+	void PostDashSetup() {
 		try {
-			playerObject.GetComponent<TrailRenderer>().time = m_skillInactiveTrailTime;
-			playerObject.GetComponent<PlayerInput>().enabled = true;
+			m_casterGameObject.GetComponent<TrailRenderer>().time = m_skillInactiveTrailTime;
+			m_casterGameObject.GetComponent<PlayerInput>().enabled = true;
 		} catch (MissingComponentException e) {
 			Debug.LogError($"Missing required component on player GameObject:\n\n{e.Message}", this);
 		} catch (Exception e) {

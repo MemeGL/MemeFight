@@ -21,12 +21,17 @@ namespace MemeFight.Components
 			[SerializeField]
 			int m_skillIndexSecondary = 0;
 
+			private void Awake() {
+				m_playerSkillRepository.GetSkillAt(m_skillIndexPrimary)?.AssignCaster(gameObject);
+				m_playerSkillRepository.GetSkillAt(m_skillIndexSecondary)?.AssignCaster(gameObject);
+			}
+
 			public virtual void TriggerPrimarySkill(params object[] args) {
-				StartCoroutine(m_playerSkillRepository.GetSkillAt(m_skillIndexPrimary)?.TriggerSkillCoroutine(gameObject, Stage.Stage.CurrentStageInstance.CurrentBossObject, args));
+				StartCoroutine(m_playerSkillRepository.GetSkillAt(m_skillIndexPrimary)?.TriggerSkillCoroutine(Stage.Stage.CurrentStageInstance.CurrentBossObject, args));
 			}
 
 			public virtual void TriggerSecondarySkill(params object[] args) {
-				StartCoroutine(m_playerSkillRepository.GetSkillAt(m_skillIndexSecondary)?.TriggerSkillCoroutine(gameObject, Stage.Stage.CurrentStageInstance.CurrentBossObject, args));
+				StartCoroutine(m_playerSkillRepository.GetSkillAt(m_skillIndexSecondary)?.TriggerSkillCoroutine(Stage.Stage.CurrentStageInstance.CurrentBossObject, args));
 			}
 
 			public virtual void AssignPrimarySkill(int skillIndex) {

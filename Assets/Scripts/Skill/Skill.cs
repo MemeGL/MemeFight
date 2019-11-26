@@ -8,6 +8,14 @@ namespace MemeFight.Skills
 	/// </summary>
 	public abstract class Skill : ScriptableObject {
 
+		/// <summary>
+		/// The <seealso cref="GameObject"/> of this <see cref="Skill"/>'s caster.
+		/// </summary>
+		[Header("Caster GameObject")]
+		[SerializeField]
+		protected GameObject m_casterGameObject;
+
+		[Header("Default Skill attributes")]
 		[SerializeField]
 		protected float m_duration;
 		[SerializeField]
@@ -21,12 +29,8 @@ namespace MemeFight.Skills
 		/// <br />
 		/// This method is made `abstract` for freedom of custom <see cref="Skill"/> implementation.
 		/// </summary>
-		/// <param name="casterGameObject">
-		/// The <seealso cref="GameObject"/> of the entity that casted this <see cref="Skill"/>.
-		/// Positive buff <see cref="Skill"/>s should use this reference <seealso cref="GameObject"/> for skill effect application.
-		/// </param>
 		/// <param name="targetGameObject">
-		/// The <seealso cref="GameObject"/> of the target entity (NOT the caster itself) that this <see cref="Skill"/> should act on.
+		/// The <seealso cref="GameObject"/> of the target entity (NOT the <see cref="Skill.m_casterGameObject"/> itself) that this <see cref="Skill"/> should act on.
 		/// <br />
 		/// Typical use cases involve Player --> Boss and Boss --> Player.
 		/// <br />
@@ -34,10 +38,14 @@ namespace MemeFight.Skills
 		/// </param>
 		/// <param name="args">Any additional information to be supplied to this <see cref="Skill"/> method.</param>
 		/// <returns></returns>
-		public abstract IEnumerator TriggerSkillCoroutine(GameObject casterGameObject, GameObject targetGameObject, params object[] args);
+		public abstract IEnumerator TriggerSkillCoroutine(GameObject targetGameObject, params object[] args);
 
 		protected virtual void OnEnable() {
 			m_canTrigger = true;
+		}
+
+		public virtual void AssignCaster(GameObject caster) {
+			m_casterGameObject = caster;
 		}
 
 	}
