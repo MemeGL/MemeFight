@@ -8,10 +8,17 @@ using MemeFight.Components.Player;
 [CreateAssetMenu(fileName = "Dash", menuName = "Skill/Dash", order = 2)]
 public class Dash : MemeFight.Skills.Skill {
 
+	[Header("Dash Skill attributes")]
 	[SerializeField]
 	float m_dashMagnitude;
+
+	[Header("Dash visual effects")]
 	[SerializeField]
 	GameObject m_dashEffect;
+
+	[Header("Dash visual effects on Player")]
+	[SerializeField]
+	GameObject m_playerObject;
 	[SerializeField]
 	float m_skillInactiveTrailTime;
 	[SerializeField]
@@ -60,13 +67,16 @@ public class Dash : MemeFight.Skills.Skill {
 	/// that is required to visualize the <see cref="Dash"/> effect.
 	/// </summary>
 	protected override void OnEnable() {
-		GameObject playerObject = GameObject.Find(Global.NAME_OBJECT_PLAYER);
+		if (m_playerObject == null) {
+			// Try to locate the default Player object by name if it was not assigned.
+			m_playerObject = GameObject.Find(Global.NAME_OBJECT_PLAYER);
 
-		if (playerObject == null) {
-			Debug.LogError("Player object not located in present scene.", this);
+			if (m_playerObject == null) {
+				Debug.LogError("Player object not located in present scene.", this);
+			}
 		} else {
 			try {
-				playerObject.GetComponent<TrailRenderer>().time = m_skillInactiveTrailTime;
+				m_playerObject.GetComponent<TrailRenderer>().time = m_skillInactiveTrailTime;
 			} catch (MissingComponentException e) {
 				Debug.LogError($"Missing required component on player GameObject:\n\n{e.Message}", this);
 			} catch (Exception e) {
