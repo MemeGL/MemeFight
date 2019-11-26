@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-using MemeFight.Components.Utilities.ObjectPooling;
+﻿using UnityEngine;
 
 namespace MemeFight.Components
 {
@@ -13,10 +11,6 @@ namespace MemeFight.Components
 
         private Vector2 m_velocity;
         protected float m_lifetime;
-
-		protected virtual void Awake() {
-            Fire(transform.position, Vector2.down, 100);
-		}
 
 		protected virtual void Update() {
 			if (m_lifetime <= 0) {
@@ -31,10 +25,11 @@ namespace MemeFight.Components
             transform.position += (Vector3)m_velocity * Time.fixedDeltaTime;
         }
 
-		public virtual void Fire(Vector3 startPosition, Vector2 velocity, float lifetime) {
+		public virtual void Fire(Vector3 startPosition, Vector2 velocity, float lifetime, float gravityMultiplier = 0) {
 			transform.position = startPosition;
 			m_lifetime = lifetime;
             m_velocity = velocity;
+			m_gravityMultiplier = gravityMultiplier;
 		}
 
 		protected virtual void OnExpiry() {
