@@ -10,12 +10,18 @@ namespace MemeFight.Stage
 
 		public static MemeFight.Stage.Stage CurrentStageInstance;
 
+		public GameObject CurrentPlayerObject;
 		public GameObject CurrentBossObject;
 
 		protected bool m_hasStageEnded = false;
 
 		public virtual void Awake() {
 			CurrentStageInstance = this;
+
+			// Locate the Player if not assigned.
+			if (CurrentPlayerObject == null) {
+				CurrentPlayerObject = GameObject.Find(Global.NAME_OBJECT_PLAYER);
+			}
 
 			// If the player dies, he loses the stage.
 			StageEntity player = GameObject.Find(Global.NAME_OBJECT_PLAYER)?.GetComponent<StageEntity>();
